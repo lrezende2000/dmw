@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { PageContext } from '../context';
 import styled from 'styled-components';
 
@@ -90,6 +90,7 @@ const LoadContainer = styled.div`
 `;
 
 export default function Form({ setUser }) {
+  const [didMount, setDidMount] = useState(false); 
   const [email, setEmail] = useState('');
   const [focused, setFocused] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -118,6 +119,15 @@ export default function Form({ setUser }) {
     }
 
     setLoading(false);
+  }
+
+  useEffect(() => {
+    setDidMount(true);
+    return () => setDidMount(false);
+  }, [])
+
+  if(!didMount) {
+    return null;
   }
 
   return (
