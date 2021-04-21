@@ -1,7 +1,7 @@
 export const Tabs = [
   {
     name: 'Home',
-    path: '/home'
+    path: '/'
   },
   {
     name: 'Sobre',

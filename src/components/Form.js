@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useContext, useCallback } from 'react';
+import { PageContext } from '../context';
 import styled from 'styled-components';
 
 import { githubAPI } from '../services/github';
@@ -88,10 +89,11 @@ const LoadContainer = styled.div`
   margin-top: var(--space-12x);
 `;
 
-export default function Form() {
+export default function Form({ setUser }) {
   const [email, setEmail] = useState('');
   const [focused, setFocused] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { setPage } = useContext(PageContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -99,18 +101,20 @@ export default function Form() {
     if (email.length) {
       setLoading(true);
       getGithubUser(email);
-    } else {}
+    }
   }
 
   const getGithubUser = async (user) => {
     if (user) {
       try {
         const { data } = await githubAPI.get(`users/${user}`);
-
-        console.log(data);
+        setUser(data);
       } catch (e) {
-        console.log(e);
+        setUser({
+          name: email
+        })
       }
+      setPage('submited');
     }
 
     setLoading(false);
